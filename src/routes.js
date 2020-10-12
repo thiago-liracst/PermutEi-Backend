@@ -9,4 +9,6 @@ routes.get('/users', UsersController.list);
 routes.put('/users', UsersController.update);
 routes.delete('/users', UsersController.delete);
 
+routes.post('/login', UsersController.login);
+
 module.exports = routes;

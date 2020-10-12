@@ -69,5 +69,19 @@ module.exports = {
         } catch (error) {
             return response.json(error);
         }
+    },
+
+    async login(request, response){
+        try {
+            const {login, senha} = request.body;
+            const users = await connection('users').select('*').where('login', login).andWhere('senha', senha).first();
+            if (users) {
+                return response.json(true);
+            } else {
+                return response.json(false);
+            }
+        } catch (error) {
+            return response.json(error);
+        }
     }
 }
