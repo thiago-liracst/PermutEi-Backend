@@ -7,15 +7,17 @@ module.exports = {
                 nome,
                 sexo,
                 datanasc,
-                endereco,
                 cpf,
                 numero,
+                estadoAtual,
+                estadoInteresse,
                 matricula,
-                batalhao,
-                batalhaointeresse,
-                disponibilidade,
+                batalhaoAtual,
+                batalhaoInteresse,
                 orgao,
                 comportamento,
+                postoGraduacao,
+                disponibilidade,
                 login,
                 senha
             } = request.body;
@@ -24,15 +26,17 @@ module.exports = {
                 nome,
                 sexo,
                 datanasc,
-                endereco,
                 cpf,
                 numero,
+                estadoAtual,
+                estadoInteresse,
                 matricula,
-                batalhao,
-                batalhaointeresse,
-                disponibilidade,
+                batalhaoAtual,
+                batalhaoInteresse,
                 orgao,
                 comportamento,
+                postoGraduacao,
+                disponibilidade,
                 login,
                 senha
             });
@@ -45,6 +49,12 @@ module.exports = {
     async list(request, response){
         try {
             const users = await connection('users').select('*');
+            const aux = [];
+            users.map((user) => {
+                if (user.disponibilidade===1) {
+                    aux.push(user);
+                }
+            })
             return response.json(users);
         } catch (error) {
             return response.json(error);
@@ -83,5 +93,60 @@ module.exports = {
         } catch (error) {
             return response.json(error);
         }
+    },
+
+    async updateAll(request, response){
+        try {
+            const {
+                nome,
+                sexo,
+                datanasc,
+                cpf,
+                numero,
+                estadoAtual,
+                estadoInteresse,
+                matricula,
+                batalhaoAtual,
+                batalhaoInteresse,
+                orgao,
+                comportamento,
+                postoGraduacao,
+                disponibilidade,
+                login,
+                senha
+            } = request.body;
+
+            await connection('users').where('cpf', cpf).update({
+                nome,
+                sexo,
+                datanasc,
+                numero,
+                estadoAtual,
+                estadoInteresse,
+                matricula,
+                batalhaoAtual,
+                batalhaoInteresse,
+                orgao,
+                comportamento,
+                postoGraduacao,
+                disponibilidade,
+                login,
+                senha
+            });
+            return response.json("Sucess!")
+        } catch (error) {
+            return response.json(error);
+        }
+    },
+
+    async setDisponibilidade(request, response){
+        try {
+            const {cpf, disponibilidade} = request.body;
+            await connection('users').where('cpf', cpf).update('disponibilidade', disponibilidade);
+            return response.json("Sucess!")
+        } catch (error) {
+            return response.json(error);
+        }
+
     }
 }
