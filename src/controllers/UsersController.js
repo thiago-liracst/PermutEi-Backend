@@ -49,12 +49,6 @@ module.exports = {
     async list(request, response){
         try {
             const users = await connection('users').select('*');
-            const aux = [];
-            users.map((user) => {
-                if (user.disponibilidade===1) {
-                    aux.push(user);
-                }
-            })
             return response.json(users);
         } catch (error) {
             return response.json(error);
